@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import {
   Eye,
@@ -155,6 +155,8 @@ export function WhatsAppConfig() {
     }
   }, [supabase]);
 
+  const fetchedForAccount = useRef<string | null>(null);
+
   useEffect(() => {
     // Need both the auth session (`!authLoading`) AND the profile
     // (`!profileLoading`, which carries `accountId`). Without the
@@ -166,6 +168,12 @@ export function WhatsAppConfig() {
       setLoading(false);
       return;
     }
+    
+    // Prevent refetching (and wiping out user input) if we already
+    // fetched for this account and the user just switched tabs.
+    if (fetchedForAccount.current === accountId) return;
+    fetchedForAccount.current = accountId;
+    
     fetchConfig(accountId);
   }, [authLoading, profileLoading, user, accountId, fetchConfig]);
 
