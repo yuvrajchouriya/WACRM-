@@ -23,7 +23,12 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  // Use getSession() instead of getUser() in middleware.
+  // getUser() makes a network round-trip to Supabase on EVERY request,
+  // which causes MIDDLEWARE_INVOCATION_TIMEOUT on Vercel Edge Runtime.
+  // getSession() reads from the cookie locally — instant, no network call.
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user ?? null
 
   // Auth pages - redirect to dashboard if already logged in.
   // Exception: when an invite token is in the query string we
