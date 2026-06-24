@@ -14,7 +14,7 @@ import { NextResponse, type NextRequest } from 'next/server'
  * routes validate via `supabase.auth.getUser()` on the server side anyway.
  */
 
-const SUPABASE_PROJECT_REF = 'kweswizucllliezoratq'
+const SUPABASE_PROJECT_REF = 'pvnzmzopyzgduqrpvdpf'
 const SESSION_COOKIE = `sb-${SUPABASE_PROJECT_REF}-auth-token`
 
 function hasSession(request: NextRequest): boolean {
